@@ -1,62 +1,49 @@
 class Blocks {
-    int colNum, rowNum;
-    float blockWidth, blockHeight;
-
-    int[][] blocks;
+    static final int HIT_NONE = 0;
+    static final int HIT_VERTICAL = 1;
+    static final int HIT_HORIZONTAL = 2;
+    
+    Block[][] blocks;
 
     Blocks(int colNum, int rowNum) {
-        this.colNum = colNum;
-        this.rowNum = rowNum;
-        this.blockWidth = width/colNum;
-        this.blockHeight = (height/2.0) / rowNum;
-        this.blocks = new int[rowNum][colNum];
+        this.blocks = new Block[rowNum][colNum];
+        setup();
     }
 
     void setup() {
-        for (int i=0; i<rowNum; i++) {
-            for (int j=0; j<colNum; j++) {
-                blocks[i][j] = 1;
+        int rowNum = blocks.length;
+        for (int i = 0; i < rowNum; i++) {
+            int colNum = blocks[i].length;
+            for (int j = 0; j < colNum; j++) {
+                float blockWidth = width/colNum;
+                float blockHeight = (height/2.0)/rowNum;
+                blocks[i][j] = new Block(j*blockWidth, i*blockHeight, blockWidth, blockHeight, true);
             }
         }
     }
 
     void draw() {
-        for (int i=0; i<rowNum; i++) {
-            for (int j=0; j<colNum; j++) {
-                if (blocks[i][j] == 1) {
-                    fill(150);
-                    rect(j*blockWidth, i*blockHeight, blockWidth, blockHeight);
+        for (Block[] _blocks : blocks) {
+            for (Block block : _blocks) {
+                if (block.getIsActive()) {
+                    block.draw();
                 }
             }
         }
     }
 
-    boolean removeHitBlock(PVector ballPos, int ballSize) {
-        for (int i=0; i<rowNum; i++) {
-            for (int j=0; j<colNum; j++) {
-                if (blocks[i][j] == 1 && ballHitBlock(ballPos, ballSize, j*blockWidth, i*blockHeight)) {
-                    blocks[i][j] = 0;
-                    return true;
+    int ballHitBlock(Ball ball) {
+        int rowNum = blocks.length;
+        for (int i = 0; i < rowNum; i++) {
+            int colNum = blocks[i].length;
+            for (int j = 0; j < colNum; j++) {
+                int hitPosition = blocks[i][j].whereHitBall(ball);
+                if (hitPosition != 0) {
+                    blocks[i][j].isActive = false;
+                    return hitPosition;
                 }
             }
         }
-        return false;
-    }
-
-    boolean ballHitBlock(PVector ballPos, int ballSize, float blockX, float blockY) {
-        float ballTop = ballPos.y - ballSize/2.0;
-        float ballBottom = ballPos.y + ballSize/2.0;
-        float ballLeft = ballPos.x + ballSize/2.0;
-        float ballRight = ballPos.x - ballSize/2.0;
-        return (
-            (
-            (blockY <= ballTop && ballTop <= blockY + blockHeight) ||
-            (blockY <= ballBottom && ballBottom <= blockY + blockHeight)
-            ) &&
-            (
-            (blockX <= ballLeft && ballLeft <= blockX + blockWidth) ||
-            (blockX <= ballRight && ballRight <= blockX + blockWidth)
-            )
-            );
+        return HIT_NONE;
     }
 }

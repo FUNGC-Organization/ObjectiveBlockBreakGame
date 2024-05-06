@@ -14,13 +14,18 @@ void draw() {
     background(0);
     ball.draw();
     ball.update();
-    if(ball.checkHitRacket(racket.getPos(), racket.getWidth())) {
+    if (ball.checkHitRacket(racket.getPos(), racket.getWidth())) {
         ball.reflectionVertical();
     }
     racket.draw();
     racket.update();
     blocks.draw();
-    if(blocks.removeHitBlock(ball.getPos(), ball.getSize())) {
-           ball.reflectionVertical();
+    switch(blocks.ballHitBlock(ball)) {
+    case Blocks.HIT_VERTICAL:
+        ball.reflectionVertical();
+        break;
+    case Blocks.HIT_HORIZONTAL:
+        ball.reflectionHorizontal();
+        break;
     }
 }

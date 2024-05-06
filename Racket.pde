@@ -1,7 +1,7 @@
 class Racket {
-    PVector pos;
-    final int RACKET_WIDTH = 100;
-    final int RACKET_HEIGHT = 20;
+    private PVector pos;
+    private final int RACKET_WIDTH = 100;
+    private final int RACKET_HEIGHT = 20;
 
     Racket(float x, float y) {
         pos = new PVector(x, y);

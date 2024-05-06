@@ -1,6 +1,6 @@
 class Ball {
-    PVector pos, vec;
-    final int BALL_SIZE = 30;
+    private PVector pos, vec;
+    private final int BALL_SIZE = 30;
 
     Ball(float x, float y, float vx, float vy) {
         pos = new PVector(x, y);
@@ -32,6 +32,10 @@ class Ball {
 
     void reflectionVertical() {
         vec.y = -vec.y;
+    }
+
+    void reflectionHorizontal() {
+        vec.x = -vec.x;
     }
 
     boolean checkHitSideWall() {
