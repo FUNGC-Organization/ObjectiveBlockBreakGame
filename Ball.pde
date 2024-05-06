@@ -60,4 +60,8 @@ class Ball {
     int getSize() {
         return BALL_SIZE;
     }
+    
+    boolean isGameOver() {
+         return pos.y - BALL_SIZE/2.0 > height;   
+    }
 }

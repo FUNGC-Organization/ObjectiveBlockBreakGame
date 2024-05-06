@@ -2,7 +2,7 @@ class Blocks {
     static final int HIT_NONE = 0;
     static final int HIT_VERTICAL = 1;
     static final int HIT_HORIZONTAL = 2;
-    
+
     Block[][] blocks;
 
     Blocks(int colNum, int rowNum) {
@@ -38,12 +38,22 @@ class Blocks {
             int colNum = blocks[i].length;
             for (int j = 0; j < colNum; j++) {
                 int hitPosition = blocks[i][j].whereHitBall(ball);
-                if (hitPosition != 0) {
+                if (hitPosition != Blocks.HIT_NONE) {
                     blocks[i][j].isActive = false;
                     return hitPosition;
                 }
             }
         }
         return HIT_NONE;
+    }
+    
+    boolean isGameClear() {
+        for(Block[] _blocks : blocks) {
+             for(Block block : _blocks) {
+                 if(block.isActive)
+                     return false;
+             }
+        }
+        return true;
     }
 }
